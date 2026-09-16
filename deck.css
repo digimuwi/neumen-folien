@@ -83,6 +83,21 @@ html, body, .reveal-viewport { background: var(--paper); }
   color: var(--body);
 }
 
+/* A slide carried by text alone: one column, a little larger. */
+.body.prose { display: block; max-width: 1000px; }
+.body.prose .lede { font-size: 30px; }
+.body.prose .facts { margin-top: 14px; }
+.body.prose .facts li { padding: 18px 0; font-size: 21px; }
+
+.facts-label {
+  margin-top: 36px !important;
+  font: 600 17px/1 var(--sans);
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.facts li.caveat { color: var(--accent); }
+
 .facts {
   list-style: none;
   margin: 32px 0 0;
