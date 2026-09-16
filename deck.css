@@ -59,13 +59,6 @@ html, body, .reveal-viewport { background: var(--paper); }
 
 .reveal p { margin: 0; }
 
-.kicker {
-  margin-bottom: 14px !important;
-  font: 600 17px/1 var(--sans);
-  letter-spacing: 0.02em;
-  color: var(--accent);
-}
-
 .body {
   flex: 1;
   min-height: 0;
@@ -163,8 +156,8 @@ html, body, .reveal-viewport { background: var(--paper); }
 
 .key-cap {
   position: absolute;
-  right: 20px;
-  bottom: 20px;
+  left: 24px;
+  top: 68px;
   padding: 12px 20px;
   border-radius: 10px;
   background: rgba(17, 24, 39, 0.92);
@@ -222,6 +215,14 @@ html, body, .reveal-viewport { background: var(--paper); }
 
 .stage.wide { width: 100%; }
 
+/* A full-width stage is bounded by height, or the video would outgrow the slide. */
+.stage.wide .media > video {
+  width: auto;
+  max-width: 100%;
+  max-height: 540px;
+  margin: 0 auto;
+}
+
 .media.live { height: 560px; }
 
 .live-panes {
@@ -250,7 +251,9 @@ html, body, .reveal-viewport { background: var(--paper); }
   color: var(--muted);
 }
 
-.editor { position: relative; flex: 1; min-height: 0; }
+.code-editor { position: relative; flex: 1; min-height: 0; }
+
+.pane-name { margin-left: 12px; font-weight: 400; letter-spacing: 0; color: var(--ink); }
 
 /* The textarea lies transparently over the highlighted copy, so editing keeps the colours. */
 #live-mei,

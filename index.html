@@ -29,7 +29,6 @@
 
 <section>
   <div class="frame">
-    <p class="kicker">Verovio</p>
     <h2>MEI-Rendering von adiastematischen Neumen in Verovio</h2>
     <div class="body">
       <div class="r-stack stage wide">
@@ -41,14 +40,14 @@
                 <button type="button" id="live-restart" class="pane-action">Demo fortsetzen</button>
                 <span class="pane-status">unvollständig</span>
               </p>
-              <div class="editor">
+              <div class="code-editor">
                 <pre id="live-mei" aria-hidden="true"></pre>
                 <textarea id="live-input" spellcheck="false" autocomplete="off" autocapitalize="off"
                   aria-label="MEI-Kodierung bearbeiten"></textarea>
               </div>
             </div>
             <div class="pane">
-              <p class="pane-label">Verovio</p>
+              <p class="pane-label">Verovio <span id="live-name" class="pane-name"></span></p>
               <div id="live-render"></div>
             </div>
           </div>
@@ -78,7 +77,6 @@
 
 <section>
   <div class="frame">
-    <p class="kicker">eChant</p>
     <h2>eChant: Neumeneditor</h2>
     <div class="body">
       <figure class="media editor" id="editor-panel">
@@ -106,18 +104,9 @@
 
 <section>
   <div class="frame">
-    <p class="kicker">eChant</p>
     <h2>eChant: Handschrift → MEI-Kodierung</h2>
-    <div class="body split">
-      <div>
-        <p class="lede">Die Erkennung überträgt eine Seite in MEI, verknüpft mit dem Faksimile. Korrigiert wird im Editor.</p>
-        <ul class="facts">
-          <li>Segmentierung, Texterkennung mit Kraken und dem <span class="nobr">TRIDIS-Modell</span> (Torres Aguilar 2024), Klassifikation und Gruppierung der Neumen, Zuordnung zu Silben.</li>
-          <li>Ausgehend von handannotierten Neumen werden <b>87,3&#8239;%</b> der richtigen Silbe zugeordnet (68&nbsp;Zeilen). Eine Evaluation der Pipeline als Ganzes steht noch aus.</li>
-          <li>Referenzdaten: <b>2.509</b> Annotationen auf 17&nbsp;Seiten und <b>4.923</b> von Hand geprüfte Tintenkomponenten.</li>
-        </ul>
-      </div>
-      <div class="r-stack stage">
+    <div class="body">
+      <div class="r-stack stage wide">
         <figure class="media">
           <video data-autoplay muted loop playsinline poster="assets/pipeline/pipeline-demo-poster.png">
             <source src="assets/pipeline/pipeline-demo.mp4" type="video/mp4">
@@ -130,6 +119,10 @@
     <footer class="foot"><img src="assets/logo/tree.svg" alt=""><span>Morent / Böttiger / Pfeffer</span><span class="page"></span></footer>
   </div>
   <aside class="notes">
+    Die Erkennung überträgt eine Seite in MEI, verknüpft mit dem Faksimile. Korrigiert wird im Editor.
+    Stufen: Segmentierung, Texterkennung mit Kraken und dem TRIDIS-Modell (Torres Aguilar 2024), Klassifikation und Gruppierung der Neumen, Zuordnung zu Silben.
+    Ausgehend von handannotierten Neumen werden 87,3 % der richtigen Silbe zugeordnet, gemessen an 68 Zeilen. Eine Evaluation der Pipeline als Ganzes steht noch aus.
+    Referenzdaten: 2.509 Annotationen auf 17 Seiten und 4.923 von Hand geprüfte Tintenkomponenten.
     Gemessen sind nur einzelne Stufen, z.&#8239;B. Gruppierung F1 = 0,842.
     Auf dem Produktionsserver ist bewusst keine Erkennung installiert.
     Keine Edition: Fehler sind im MEI nicht markiert.

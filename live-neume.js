@@ -1,37 +1,56 @@
-/* Slide 2: the adiastematic Verovio fork renders MEI live, first typed by the deck,
-   then editable by whoever clicks into the pane. */
+/* Slide 2: the adiastematic Verovio fork renders MEI live. The deck edits one snippet
+   step by step, each step a single insertion or deletion, and hands the pane over on a click. */
 
 (() => {
-const CHAR_MS = 26;
-const DELETE_MS = 9;
-const HOLD_MS = 2000;
-const LOOP_PAUSE_MS = 2600;
+const CHAR_MS = 30;
+const DELETE_MS = 18;
+const HOLD_MS = 2200;
+const TURN_MS = 2800;
 const TOOLKIT_TIMEOUT_MS = 8000;
+const CARET = "";
 
+/* One snippet, grown and pruned again: every step differs from its neighbour by
+   one attribute or one element, so the rendering answers a single edit. */
 const STATES = [
-  `<syllable>
-  <syl>Virga</syl>
+  {
+    name: "Virga",
+    mei: `<syllable>
   <neume>
     <nc tilt="ne"/>
   </neume>
 </syllable>`,
-  `<syllable>
-  <syl>Clivis</syl>
+  },
+  {
+    name: "Clivis",
+    mei: `<syllable>
+  <neume>
+    <nc tilt="ne"/>
+    <nc tilt="s" intm="d"/>
+  </neume>
+</syllable>`,
+  },
+  {
+    name: "Clivis, gebogen",
+    mei: `<syllable>
   <neume>
     <nc tilt="ne" curve="c"/>
     <nc tilt="s" intm="d"/>
   </neume>
 </syllable>`,
-  `<syllable>
-  <syl>Porrectus</syl>
+  },
+  {
+    name: "Porrectus",
+    mei: `<syllable>
   <neume>
     <nc tilt="ne" curve="c"/>
     <nc tilt="s" intm="d"/>
     <nc tilt="ne" intm="u"/>
   </neume>
 </syllable>`,
-  `<syllable>
-  <syl>Porrectus liquescens</syl>
+  },
+  {
+    name: "Porrectus liquescens",
+    mei: `<syllable>
   <neume>
     <nc tilt="ne" curve="c"/>
     <nc tilt="s" intm="d"/>
@@ -40,16 +59,7 @@ const STATES = [
     </nc>
   </neume>
 </syllable>`,
-  `<syllable>
-  <syl>Quilisma scandicus</syl>
-  <neume>
-    <nc tilt="e" rellen="s"/>
-    <nc con="g" intm="u">
-      <quilisma waves="3"/>
-    </nc>
-    <nc tilt="ne" rellen="l"/>
-  </neume>
-</syllable>`,
+  },
 ];
 
 const document_for = (snippet) => `<?xml version="1.0" encoding="UTF-8"?>
@@ -79,17 +89,26 @@ const commonPrefix = (a, b) => {
   return differs === undefined ? limit : differs;
 };
 
+const commonSuffix = (a, b, floor) => {
+  const limit = Math.min(a.length, b.length) - floor;
+  const differs = Array.from({ length: Math.max(limit, 0) }, (_, i) => i)
+    .find((i) => a[a.length - 1 - i] !== b[b.length - 1 - i]);
+  return differs === undefined ? Math.max(limit, 0) : differs;
+};
+
 class LiveNeume {
   constructor(toolkit, elements) {
     this.toolkit = toolkit;
     this.elements = elements;
     this.text = "";
+    this.caret = 0;
     this.generation = 0;
     this.edited = false;
   }
 
   show({ caret = true } = {}) {
-    this.elements.code.innerHTML = highlight(this.text) + (caret ? '<span class="caret"></span>' : "");
+    const marked = caret ? this.text.slice(0, this.caret) + CARET + this.text.slice(this.caret) : this.text;
+    this.elements.code.innerHTML = highlight(marked).replace(CARET, '<span class="caret"></span>');
     if (this.elements.input.value !== this.text) this.elements.input.value = this.text;
   }
 
@@ -103,16 +122,28 @@ class LiveNeume {
     this.elements.render.innerHTML = this.toolkit.renderToSVG(1);
   }
 
+  name(text) {
+    this.elements.name.textContent = text ?? "";
+  }
+
+  /** Turns the pane's text into `target` by editing only the part that differs. */
   async write(target, generation) {
-    const keep = commonPrefix(this.text, target);
-    while (this.text.length > keep && this.generation === generation) {
-      this.text = this.text.slice(0, -1);
+    const start = commonPrefix(this.text, target);
+    const keepEnd = commonSuffix(this.text, target, start);
+    const insert = target.slice(start, target.length - keepEnd);
+
+    this.caret = this.text.length - keepEnd;
+    while (this.caret > start && this.generation === generation) {
+      this.text = this.text.slice(0, this.caret - 1) + this.text.slice(this.caret);
+      this.caret -= 1;
       this.show();
       this.render();
       await wait(DELETE_MS);
     }
-    while (this.text.length < target.length && this.generation === generation) {
-      this.text = target.slice(0, this.text.length + 1);
+    for (const character of insert) {
+      if (this.generation !== generation) return;
+      this.text = this.text.slice(0, this.caret) + character + this.text.slice(this.caret);
+      this.caret += 1;
       this.show();
       this.render();
       await wait(CHAR_MS);
@@ -122,16 +153,15 @@ class LiveNeume {
   async play() {
     if (this.edited) return;
     const generation = ++this.generation;
+    const forwards = STATES;
+    const backwards = STATES.slice(0, -1).reverse();
     while (this.generation === generation) {
-      for (const state of STATES) {
-        await this.write(state, generation);
+      for (const state of [...forwards, ...backwards]) {
+        await this.write(state.mei, generation);
         if (this.generation !== generation) return;
-        await wait(HOLD_MS);
+        this.name(state.name);
+        await wait(state === STATES.at(-1) ? TURN_MS : HOLD_MS);
       }
-      await wait(LOOP_PAUSE_MS);
-      if (this.generation !== generation) return;
-      this.text = "";
-      this.show();
     }
   }
 
@@ -144,11 +174,13 @@ class LiveNeume {
     this.stop();
     this.edited = true;
     this.elements.panel.classList.add("editing");
+    this.name("");
     this.show({ caret: false });
   }
 
   onInput() {
     this.text = this.elements.input.value;
+    this.caret = this.elements.input.selectionStart ?? this.text.length;
     this.show({ caret: false });
     this.render();
   }
@@ -158,6 +190,7 @@ class LiveNeume {
     this.elements.panel.classList.remove("editing", "invalid");
     this.elements.input.blur();
     this.text = "";
+    this.caret = 0;
     this.show();
     this.play();
   }
@@ -206,6 +239,7 @@ toolkitReady().then((toolkit) => {
     input: document.getElementById("live-input"),
     render: document.getElementById("live-render"),
     restart: document.getElementById("live-restart"),
+    name: document.getElementById("live-name"),
   };
   const live = new LiveNeume(toolkit, elements);
 

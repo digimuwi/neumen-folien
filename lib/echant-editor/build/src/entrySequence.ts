@@ -26,8 +26,25 @@
  */
 
 import payloads from '../data/payloads-cropped.json';
+import authoredByNeume from '../data/authored.json';
 import { determineNeumeType } from '@echant/editor/Music';
 import { deriveNeumeNameOffline, NameComponent } from './deriveName';
+
+/** What the published corpus (`echant-data`) has for a neume, matched to the
+ *  stored one by its facsimile zone. This chant's MEI carries a contour plus the
+ *  marks and letters the annotator set, and no visual attributes at all, so it
+ *  is the authority on which of a stored component's values someone typed. */
+interface Authored {
+  contour: (string | null)[];
+  marks: string[][];
+  attrs: Record<string, string>[];
+  litterae: { letter: string; place: string }[];
+  /** False where the two stores disagree about the note count; the marks then
+   *  cannot be lined up note by note, so only the letters stand. */
+  contourMatches: boolean;
+}
+
+const AUTHORED = authoredByNeume as Record<string, Authored | undefined>;
 
 /** `r` steps through this from no tilt at all (Canvas.tsx's TILT_CYCLE). */
 const TILT_CYCLE = [undefined, 'n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'];
@@ -53,8 +70,14 @@ const FIELD_OF: Record<string, string> = {
  *  follows the Space that leaves the neume, where the placement grid is. */
 export type EntryStep =
   | { kind: 'key'; key: string }
-  | { kind: 'inspector'; field: string; value: string }
-  | { kind: 'littera'; place: string; letter: string };
+  | { kind: 'inspector'; field: string; value: string; seeded: boolean }
+  | { kind: 'littera'; place: string; letter: string; seeded: boolean };
+
+/** `seeded` marks a value the system supplied rather than a person: the class
+ *  seed materialised onto the stored components, or an older backfill. Filtering
+ *  those out leaves what an annotator actually entered — see `stepsAuthored`. */
+const authoredOnly = (steps: EntryStep[]): EntryStep[] =>
+  steps.filter((step) => step.kind === 'key' || !step.seeded);
 
 export interface NeumeEntry {
   /** The stored neume's id. A typed neume gets a fresh one, so drive the
@@ -68,8 +91,12 @@ export interface NeumeEntry {
   keysWithTilt: string[];
   /** Keys and inspector clicks interleaved, in the order to perform them. */
   steps: EntryStep[];
+  /** The same, without the values the system supplied — what a person types. */
+  stepsAuthored: EntryStep[];
   /** The traditional name after `keys` alone… */
   expect: string;
+  /** …after the authored steps… */
+  expectAuthored: string;
   /** …after every step… */
   afterInspector: string;
   /** …and the name the stored neume itself reads out to. */
@@ -83,6 +110,7 @@ export interface SyllableEntry {
   keys: string[];
   keysWithTilt: string[];
   steps: EntryStep[];
+  stepsAuthored: EntryStep[];
   neumes: NeumeEntry[];
 }
 
@@ -93,17 +121,34 @@ const tiltKeys = (tilt: string | null | undefined): string[] => {
   return steps > 0 ? Array<string>(steps).fill('r') : [];
 };
 
-/** The inspector clicks one note needs, shape first, then marks, then the rest. */
-function noteSteps(component: NameComponent): EntryStep[] {
+/** The inspector clicks one note needs, shape first, then marks, each tagged
+ *  with whether the published corpus has it or the system supplied it. */
+function noteSteps(component: NameComponent, published: Authored | undefined, note: number): EntryStep[] {
   const record = component as Record<string, unknown>;
+  // `s_shape` is `@s-shape` in MEI; everything else spells the same.
+  const publishedAttrs = published?.attrs[note] ?? {};
+  const publishedMarks = published?.contourMatches ? published.marks[note] ?? [] : [];
+
   const attrs = Object.entries(FIELD_OF).flatMap(([attr, field]) => {
     const value = record[attr];
     if (value === null || value === undefined || value === false) return [];
-    return [{ kind: 'inspector' as const, field, value: value === true ? attr : String(value) }];
+    const written = value === true ? attr : String(value);
+    const inCorpus = publishedAttrs[attr === 's_shape' ? 's-shape' : attr];
+    return [
+      {
+        kind: 'inspector' as const,
+        field,
+        value: written,
+        seeded: inCorpus !== (value === true ? 'true' : String(value)),
+      },
+    ];
   });
-  const marks = (component.specials ?? []).map(
-    (mark) => ({ kind: 'inspector' as const, field: 'Marks', value: mark }),
-  );
+  const marks = (component.specials ?? []).map((mark) => ({
+    kind: 'inspector' as const,
+    field: 'Marks',
+    value: mark,
+    seeded: !publishedMarks.includes(mark),
+  }));
   return [...attrs, ...marks];
 }
 
@@ -118,28 +163,45 @@ function neumeEntry(neume: {
   signif_letters?: { letter: string; place: string }[];
 }): NeumeEntry {
   const components = neume.components as NameComponent[];
+  const published = AUTHORED[neume.id ?? ''];
   const keys = ['*'];
   const keysWithTilt = ['*', ...tiltKeys(components[0]?.tilt)];
-  const steps: EntryStep[] = [key('*'), ...noteSteps(components[0])];
+  const steps: EntryStep[] = [key('*'), ...noteSteps(components[0], published, 0)];
 
-  for (const component of components.slice(1)) {
+  components.slice(1).forEach((component, index) => {
     const motion = component.intm ?? 's';
     keys.push(motion);
     keysWithTilt.push(motion, ...tiltKeys(component.tilt));
-    steps.push(key(motion), ...noteSteps(component));
-  }
+    steps.push(key(motion), ...noteSteps(component, published, index + 1));
+  });
 
   // The Space that leaves the neume; the placement grid is reachable after it.
   keys.push(' ');
   keysWithTilt.push(' ');
   steps.push(key(' '));
   for (const { letter, place } of neume.signif_letters ?? []) {
-    steps.push({ kind: 'littera', place, letter });
+    const inCorpus = (published?.litterae ?? []).some((l) => l.letter === letter && l.place === place);
+    steps.push({ kind: 'littera', place, letter, seeded: !inCorpus });
   }
 
   // A typed neume's base shape comes from its contour alone.
   const typed = typedComponents(components);
   const typedBase = determineNeumeType(typed.slice(1).map((c) => c.intm as 'u' | 's' | 'd')).at(0);
+
+  // What the document holds once only the authored steps have been performed.
+  const authoredComponents = components.map((component, note) => {
+    const kept = authoredOnly(noteSteps(component, published, note));
+    const attrs = Object.fromEntries(
+      kept
+        .filter((step) => step.kind === 'inspector' && step.field !== 'Marks')
+        .map((step) => [ATTR_OF[(step as { field: string }).field] ?? '', (step as { value: string }).value]),
+    );
+    return {
+      ...typed[note],
+      ...attrs,
+      specials: kept.filter((s) => s.kind === 'inspector' && s.field === 'Marks').map((s) => (s as { value: string }).value),
+    } as NameComponent;
+  });
 
   return {
     id: neume.id ?? '',
@@ -147,7 +209,9 @@ function neumeEntry(neume: {
     keys,
     keysWithTilt,
     steps,
+    stepsAuthored: authoredOnly(steps),
     expect: deriveNeumeNameOffline(typed, typedBase),
+    expectAuthored: deriveNeumeNameOffline(authoredComponents, typedBase),
     afterInspector: deriveNeumeNameOffline(components, typedBase),
     target: deriveNeumeNameOffline(components, neume.type_key),
   };
@@ -171,6 +235,7 @@ function build(): SyllableEntry[] {
         keys: [...neumes.flatMap((n) => n.keys), ' '],
         keysWithTilt: [...neumes.flatMap((n) => n.keysWithTilt), ' '],
         steps: [...neumes.flatMap((n) => n.steps), key(' ')],
+        stepsAuthored: [...neumes.flatMap((n) => n.stepsAuthored), key(' ')],
         neumes,
       };
     }),
@@ -182,3 +247,14 @@ export const entrySequence: SyllableEntry[] = build();
 
 /** „Dif-fu-sa est" — the phrase the slide types. */
 export const firstPhrase: SyllableEntry[] = entrySequence.slice(0, 4);
+
+/** The same, with `steps` narrowed to what a person typed. Handed out as its own
+ *  array so a driver can take either without unpicking the flags itself. */
+const withAuthoredSteps = (entry: SyllableEntry): SyllableEntry => ({
+  ...entry,
+  steps: entry.stepsAuthored,
+  neumes: entry.neumes.map((n) => ({ ...n, steps: n.stepsAuthored, afterInspector: n.expectAuthored })),
+});
+
+export const entrySequenceAuthored: SyllableEntry[] = entrySequence.map(withAuthoredSteps);
+export const firstPhraseAuthored: SyllableEntry[] = firstPhrase.map(withAuthoredSteps);
