@@ -1,6 +1,6 @@
 Folien für Vortrag bei GfM-Fachgruppensymposium Digitale Musikwissenschaft/KI 29.9.26.
 
-Zum Präsentiereen `index.html` öffnen.
+Zum Präsentieren `index.html` öffnen.
 
 | Taste | Funktion |
 |---|---|
