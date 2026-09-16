@@ -1,0 +1,11 @@
+# Build intermediates. `payloads-cropped.json` and `neume-naming.json` are the
+# inputs the bundle is compiled from and DO belong in the repo; everything the
+# steps below produce on the way there does not — least of all the copy of the
+# development database, which holds the whole corpus.
+node_modules
+dist
+data/echant-copy.db*
+data/page-75-full.jpg
+data/payloads.json
+data/derive-cases.json
+data/derive-check.mjs

@@ -1,0 +1,90 @@
+/* The embed lives inside a reveal.js slide, so it has to fence off the deck's
+   typography rather than inherit it. Everything here is scoped to the mount. */
+
+.echant-demo {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.echant-demo-stage {
+  width: 100%;
+  height: 100%;
+  font: 14px/1.4 "Inter", system-ui, sans-serif;
+  color: #111827;
+  text-align: left;
+}
+
+.echant-demo-stage p,
+.echant-demo-stage li,
+.echant-demo-stage h1,
+.echant-demo-stage h2,
+.echant-demo-stage h3,
+.echant-demo-stage span,
+.echant-demo-stage div {
+  text-transform: none;
+  letter-spacing: normal;
+  text-wrap: auto;
+}
+
+.echant-demo-stage ul,
+.echant-demo-stage ol {
+  list-style: none;
+}
+
+.echant-demo-stage img,
+.echant-demo-stage svg {
+  max-width: none;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.echant-demo-bar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+.echant-demo-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #111827;
+}
+
+.echant-demo-source {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* The inspector shares the left pane with the music canvas; bound it so a tall
+   property list can never cover the notation on a short slide. */
+.echant-demo-inspector {
+  flex: 0 0 auto;
+  max-height: 46%;
+  overflow-y: auto;
+}
+
+.echant-demo-message {
+  padding: 24px;
+  font: 14px/1.5 "Inter", system-ui, sans-serif;
+  color: #a11e3b;
+}
+
+/* Where the keyboard rests while the editor is not in use: focusable, outside
+   `#root`, and not an input — the one state in which the editor's canvas leaves
+   the focus where it is, so the deck keeps its own shortcuts. */
+.echant-demo-parking {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}

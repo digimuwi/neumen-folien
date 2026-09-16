@@ -1,2 +1,4 @@
 research/
 .DS_Store
+lib/echant-editor/build/node_modules
+lib/echant-editor/build/dist

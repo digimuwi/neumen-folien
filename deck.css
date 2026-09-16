@@ -145,6 +145,51 @@ html, body, .reveal-viewport { background: var(--paper); }
   margin: 0 auto;
 }
 
+/* Slide 3: the embedded eChant editor */
+
+.media.editor { height: 620px; display: flex; flex-direction: column; }
+
+.editor-stage-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+#editor-stage { position: absolute; inset: 0; }
+
+.key-cap {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  background: rgba(17, 24, 39, 0.92);
+  color: #ffffff;
+  font: 600 24px/1 var(--sans);
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  pointer-events: none;
+}
+
+.key-cap.on { opacity: 1; transform: none; }
+
+/* Inspector clicks are shown too, but as an action rather than a key. */
+.key-cap.action {
+  background: rgba(161, 30, 59, 0.92);
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.media.editor figcaption .source { display: block; margin-top: 4px; color: #9ca3af; }
+
+.media.editor.editing figcaption #editor-caption { color: var(--accent); }
+
 .deck-url {
   margin-left: 14px;
   font-variant-numeric: tabular-nums;

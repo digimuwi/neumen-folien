@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>eChant-Editor im Deck — Beispiel</title>
+<style>
+  :root { --rule: #e5e7eb; --muted: #6b7280; --accent: #a11e3b; }
+  body {
+    margin: 0;
+    padding: 32px;
+    background: #ffffff;
+    font: 15px/1.5 "Inter", system-ui, sans-serif;
+    color: #374151;
+  }
+  h1 { font: 600 22px/1.2 "EB Garamond", Georgia, serif; color: #111827; margin: 0 0 4px; }
+  p { margin: 0 0 20px; color: var(--muted); }
+  #slot { position: relative; height: 620px; border: 1px solid var(--rule); }
+  #script { margin-top: 12px; font-size: 13px; color: var(--muted); }
+  #script b { color: var(--accent); font-weight: 600; }
+</style>
+</head>
+<body>
+<h1>eChant: Neumeneditor</h1>
+<p>Der Gesang wird von einer leeren Seite aus eingegeben. Ein Klick in den Editor übergibt die Tastatur, Escape gibt sie zurück.</p>
+<div id="slot"></div>
+<p id="script">…</p>
+
+<script defer src="../verovio/verovio-toolkit-wasm.js"></script>
+<script defer src="echant-editor.js"></script>
+<script defer src="example.js"></script>
+</body>
+</html>

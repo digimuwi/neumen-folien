@@ -81,12 +81,17 @@
     <p class="kicker">eChant</p>
     <h2>eChant: Neumeneditor</h2>
     <div class="body">
-      <figure class="media demo">
-        <video data-autoplay muted loop playsinline poster="assets/editor/editor-demo-poster.png">
+      <figure class="media editor" id="editor-panel">
+        <div class="editor-stage-wrap">
+          <div id="editor-stage"></div>
+          <div class="key-cap" id="editor-keys" aria-hidden="true"></div>
+        </div>
+        <video class="live-fallback" muted loop playsinline poster="assets/editor/editor-demo-poster.png">
           <source src="assets/editor/editor-demo.mp4" type="video/mp4">
           <source src="assets/editor/editor-demo.webm" type="video/webm">
         </video>
-        <figcaption>St. Gallen, Stiftsbibliothek, Cod. Sang. 338, S. 75 (e-codices, CC BY-NC 4.0). Littera significativa und Liqueszenz werden nur zur Vorführung eingefügt und danach rückgängig gemacht.</figcaption>
+        <figcaption><span id="editor-caption">Vorführung läuft, zum Selbstprobieren hineinklicken.</span>
+          <span class="source">St. Gallen, Stiftsbibliothek, Cod. Sang. 338, S. 75 (e-codices, CC BY-NC 4.0). Änderungen bleiben im Browser.</span></figcaption>
       </figure>
     </div>
     <footer class="foot"><img src="assets/logo/tree.svg" alt=""><span>Morent / Böttiger / Pfeffer</span><span class="page"></span></footer>
@@ -160,7 +165,9 @@
 <script src="lib/reveal/reveal.js"></script>
 <script src="lib/reveal/notes.js"></script>
 <script defer src="lib/verovio/verovio-toolkit-wasm.js"></script>
+<script defer src="lib/echant-editor/echant-editor.js"></script>
 <script defer src="live-neume.js"></script>
+<script defer src="live-editor.js"></script>
 <script>
   Reveal.initialize({
     width: 1600,

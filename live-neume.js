@@ -1,6 +1,7 @@
 /* Slide 2: the adiastematic Verovio fork renders MEI live, first typed by the deck,
    then editable by whoever clicks into the pane. */
 
+(() => {
 const CHAR_MS = 26;
 const DELETE_MS = 9;
 const HOLD_MS = 2000;
@@ -223,3 +224,4 @@ toolkitReady().then((toolkit) => {
   Reveal.on("slidechanged", update);
   if (Reveal.isReady()) update();
 }, useFallbackVideo);
+})();
