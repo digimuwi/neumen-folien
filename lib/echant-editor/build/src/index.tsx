@@ -20,7 +20,7 @@ import { useHoverLink } from '@echant/state/hoverLink';
 import { DemoEditor } from './DemoEditor';
 import { CHANT_ID, INLINE_FACSIMILE, setBlank, setFacsimileUrl } from './demoApi';
 import { deriveNeumeNameOffline } from './deriveName';
-import { entrySequence, firstPhrase } from './entrySequence';
+import { entrySequence, entrySequenceAuthored, firstPhrase, firstPhraseAuthored } from './entrySequence';
 import './demo.css';
 
 const DRAFT_KEY = `echant-doc-draft:${CHANT_ID}`;
@@ -609,5 +609,5 @@ export function mount(element: HTMLElement, options: MountOptions = {}): DemoHan
 }
 
 export const chantId = CHANT_ID;
-export { entrySequence, firstPhrase };
+export { entrySequence, entrySequenceAuthored, firstPhrase, firstPhraseAuthored };
 export type { EntryStep, NeumeEntry, SyllableEntry } from './entrySequence';

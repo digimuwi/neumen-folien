@@ -65,6 +65,17 @@ const FIELD_OF: Record<string, string> = {
   episema_place: 'Episema place',
 };
 
+/** …and back, so an authored step can be replayed onto a component. A `Flags`
+ *  button carries its attribute as its value and sets it true. */
+const FIELD_TO_ATTR: Record<string, string> = Object.fromEntries(
+  Object.entries(FIELD_OF)
+    .filter(([, field]) => field !== 'Flags')
+    .map(([attr, field]) => [field, attr]),
+);
+
+const asAttr = (field: string, value: string): [string, unknown] =>
+  field === 'Flags' ? [value, true] : [FIELD_TO_ATTR[field] ?? '', value];
+
 /** One thing to do, in order. After a `key` the caret sits on the note that key
  *  made, so the `inspector` steps that follow apply to it; a `littera` step
  *  follows the Space that leaves the neume, where the placement grid is. */
@@ -194,7 +205,7 @@ function neumeEntry(neume: {
     const attrs = Object.fromEntries(
       kept
         .filter((step) => step.kind === 'inspector' && step.field !== 'Marks')
-        .map((step) => [ATTR_OF[(step as { field: string }).field] ?? '', (step as { value: string }).value]),
+        .map((step) => asAttr((step as { field: string }).field, (step as { value: string }).value)),
     );
     return {
       ...typed[note],
