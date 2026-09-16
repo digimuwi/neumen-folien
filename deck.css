@@ -1,0 +1,339 @@
+@font-face { font-family: "EB Garamond"; font-weight: 400; font-style: normal; font-display: block; src: url(lib/fonts/eb-garamond-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "EB Garamond"; font-weight: 400; font-style: italic; font-display: block; src: url(lib/fonts/eb-garamond-latin-400-italic.woff2) format("woff2"); }
+@font-face { font-family: "EB Garamond"; font-weight: 500; font-style: normal; font-display: block; src: url(lib/fonts/eb-garamond-latin-500-normal.woff2) format("woff2"); }
+@font-face { font-family: "EB Garamond"; font-weight: 500; font-style: italic; font-display: block; src: url(lib/fonts/eb-garamond-latin-500-italic.woff2) format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 400; font-style: normal; font-display: block; src: url(lib/fonts/inter-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 500; font-style: normal; font-display: block; src: url(lib/fonts/inter-latin-500-normal.woff2) format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; font-style: normal; font-display: block; src: url(lib/fonts/inter-latin-600-normal.woff2) format("woff2"); }
+
+:root {
+  --paper: #ffffff;
+  --ink: #111827;
+  --body: #374151;
+  --muted: #6b7280;
+  --rule: #e5e7eb;
+  --wash: #f3f4f6;
+  --accent: #a11e3b;
+  --serif: "EB Garamond", "Hoefler Text", Georgia, serif;
+  --sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
+html, body, .reveal-viewport { background: var(--paper); }
+
+.reveal {
+  font-family: var(--sans);
+  font-size: 26px;
+  color: var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.reveal .slides { text-align: left; }
+
+.reveal .slides > section { height: 900px; padding: 0; }
+
+.reveal p, .reveal li { text-wrap: pretty; }
+
+/* The subset fonts lack U+2011, so compounds are kept whole with nowrap instead. */
+.nobr { white-space: nowrap; }
+
+.frame {
+  position: relative;
+  box-sizing: border-box;
+  height: 900px;
+  padding: 64px 88px 96px;
+  display: flex;
+  flex-direction: column;
+}
+
+.reveal h1, .reveal h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.reveal h1 { font-size: 92px; letter-spacing: -0.01em; }
+.reveal h2 { font-size: 56px; }
+
+.reveal p { margin: 0; }
+
+.kicker {
+  margin-bottom: 14px !important;
+  font: 600 17px/1 var(--sans);
+  letter-spacing: 0.02em;
+  color: var(--accent);
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  margin-top: 40px;
+  display: grid;
+  gap: 56px;
+}
+
+.split { grid-template-columns: 430px 1fr; align-items: start; }
+.split.flip { grid-template-columns: 1fr 430px; }
+
+.lede {
+  font-size: 26px;
+  line-height: 1.45;
+  color: var(--body);
+}
+
+.facts {
+  list-style: none;
+  margin: 32px 0 0;
+  padding: 0;
+}
+
+.facts li {
+  padding: 16px 0;
+  border-top: 1px solid var(--rule);
+  font-size: 18px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.facts b { font-weight: 600; color: var(--ink); }
+
+.media { margin: 0; min-width: 0; }
+
+.media video, .media img.shot {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--paper);
+}
+
+.media img.plain { display: block; width: 100%; }
+
+.media figcaption {
+  margin-top: 12px;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+/* Fragments stacked over a video: same box, caption pinned to its bottom. */
+
+.stage { align-self: start; }
+
+.reveal .stage > .media {
+  align-self: stretch;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+}
+
+.stage .fill { flex: 1; display: flex; align-items: center; }
+
+/* Slide 2: MEI typed and rendered live by the Verovio toolkit */
+
+.stage.wide { width: 100%; }
+
+.media.live { height: 560px; }
+
+.live-panes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  flex: 1;
+  min-height: 0;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.live-panes .pane {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 28px 34px;
+}
+
+.live-panes .pane + .pane { border-left: 1px solid var(--rule); }
+
+.pane-label {
+  margin-bottom: 22px !important;
+  font: 600 17px/1 var(--sans);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.editor { position: relative; flex: 1; min-height: 0; }
+
+/* The textarea lies transparently over the highlighted copy, so editing keeps the colours. */
+#live-mei,
+#live-input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: 400 25px/1.55 ui-monospace, "SF Mono", Menlo, monospace;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  overflow: auto;
+}
+
+#live-mei { color: var(--ink); }
+
+#live-input {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  background: transparent;
+  caret-color: var(--accent);
+  resize: none;
+  outline: none;
+}
+
+.pane-hint,
+.pane-status {
+  margin-left: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: #9ca3af;
+}
+
+.pane-status { display: none; color: var(--accent); }
+
+.pane-action {
+  display: none;
+  margin-left: 14px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: 600 17px var(--sans);
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.media.editing .pane-hint { display: none; }
+.media.editing .pane-action { display: inline; }
+.media.invalid .pane-status { display: inline; }
+
+#live-mei .tag { color: #9ca3af; }
+#live-mei .attr { color: var(--body); }
+#live-mei .val { color: var(--accent); }
+
+#live-mei .caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background: var(--accent);
+  animation: caret-blink 1.06s steps(1) infinite;
+}
+
+@keyframes caret-blink { 50% { opacity: 0; } }
+
+#live-render {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+#live-render svg { max-width: 100%; max-height: 100%; }
+
+.media .live-fallback { display: none; }
+
+.media.fallback-active .live-panes { display: none; }
+.media.fallback-active .live-fallback { display: block; }
+
+.foot {
+  position: absolute;
+  left: 88px;
+  right: 88px;
+  bottom: 34px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.foot img { height: 30px; }
+
+.foot .page { margin-left: auto; font-variant-numeric: tabular-nums; }
+
+.reveal .progress { height: 3px; color: var(--accent); background: transparent; }
+
+/* Title */
+
+.title-slide .frame { padding: 72px 88px 80px; }
+
+.title-slide .logo-full { width: 360px; display: block; }
+
+.title-slide .title-block { margin: auto 0; }
+
+.title-slide h1 { max-width: 1100px; }
+
+.subtitle {
+  margin-top: 28px !important;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 38px;
+  color: var(--muted);
+}
+
+.title-neumes {
+  display: block;
+  width: 990px;
+  margin-top: 80px;
+}
+
+.team {
+  position: absolute;
+  left: 88px;
+  bottom: 32px;
+  font-size: 20px;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+/* Claude Code */
+
+.stat {
+  font-family: var(--serif);
+  font-size: 40px;
+  line-height: 0.78;
+  color: var(--muted);
+}
+
+.stat .num {
+  font-size: 104px;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.stat-label {
+  margin-top: 18px !important;
+  font-size: 20px;
+  line-height: 1.4;
+  color: var(--body);
+}
+
+.chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--sans);
+}
+
+.cycle { display: block; width: 100%; height: auto; }
+
+.cycle .box { fill: none; stroke: var(--rule); rx: 6; }
+.cycle .box-title { font: 600 25px var(--sans); fill: var(--ink); }
+.cycle .box-sub { font: 400 17px var(--sans); fill: var(--muted); }
+.cycle .flow { fill: none; stroke: #9ca3af; stroke-width: 1.5; }
+.cycle .loop-label { font: 400 17px var(--sans); fill: var(--accent); }

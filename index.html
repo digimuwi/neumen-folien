@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adiastematische Neumen in MEI</title>
+<link rel="stylesheet" href="lib/reveal/reveal.css">
+<link rel="stylesheet" href="deck.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<section class="title-slide">
+  <div class="frame">
+    <img class="logo-full" src="assets/logo/uni-tuebingen-logo.svg" alt="Eberhard Karls Universität Tübingen">
+    <div class="title-block">
+      <h1>KI und Neumen</h1>
+      <p class="subtitle">Projekte der Digitalen Musikwissenschaft in Tübingen</p>
+      <img class="title-neumes" src="assets/verovio/title-neumes.png" alt="St. Galler Neumen, dargestellt mit dem Verovio-Fork">
+    </div>
+    <p class="team">Morent / Böttiger / Pfeffer</p>
+  </div>
+  <aside class="notes">
+    Vier Teile: Verovio-Fork, eChant-Editor, ML-Erkennung in eChant, Claude Code.
+  </aside>
+</section>
+
+<section>
+  <div class="frame">
+    <p class="kicker">Verovio</p>
+    <h2>MEI-Rendering von adiastematischen Neumen in Verovio</h2>
+    <div class="body">
+      <div class="r-stack stage wide">
+        <figure class="media live" id="live-panel">
+          <div class="live-panes">
+            <div class="pane">
+              <p class="pane-label">MEI
+                <span class="pane-hint">zum Bearbeiten klicken</span>
+                <button type="button" id="live-restart" class="pane-action">Demo fortsetzen</button>
+                <span class="pane-status">unvollständig</span>
+              </p>
+              <div class="editor">
+                <pre id="live-mei" aria-hidden="true"></pre>
+                <textarea id="live-input" spellcheck="false" autocomplete="off" autocapitalize="off"
+                  aria-label="MEI-Kodierung bearbeiten"></textarea>
+              </div>
+            </div>
+            <div class="pane">
+              <p class="pane-label">Verovio</p>
+              <div id="live-render"></div>
+            </div>
+          </div>
+          <video class="live-fallback" muted loop playsinline poster="assets/verovio/verovio-live-edit-crop-poster.png">
+            <source src="assets/verovio/verovio-live-edit-crop.mp4" type="video/mp4">
+            <source src="assets/verovio/verovio-live-edit-crop.webm" type="video/webm">
+          </video>
+          <figcaption>Live im Browser: Die MEI-Kodierung lässt sich anklicken und ändern, der Fork rendert sofort neu.</figcaption>
+        </figure>
+        <figure class="media fragment fade-in" data-fragment-index="0">
+          <div class="fill"><img class="plain" src="assets/verovio/verovio-chant-line.png" alt="Eine Handschriftenzeile mit Neumen über ihrer Darstellung mit dem Verovio-Fork"></div>
+          <figcaption>Zeile aus Einsiedeln, Stiftsbibliothek, Codex 121(1151), S. 35, 960–970 (e-codices, CC BY-NC 4.0), darunter die Darstellung ihrer eChant-Kodierung. Die Abstände innerhalb der Zeile sind noch ungleichmäßig.</figcaption>
+        </figure>
+      </div>
+    </div>
+    <footer class="foot"><img src="assets/logo/tree.svg" alt=""><span>Morent · Böttiger · Pfeffer</span><span class="page"></span></footer>
+  </div>
+  <aside class="notes">
+    Option --neume-calligraphic: Jede Neume wird als Federbewegung berechnet, Federwinkel und Neigung sind einstellbar.
+    Grenzen: nach Augenmaß an 136 Beispielen abgestimmt, Abstände in der Zeile noch ungleichmäßig.
+    Ein Klick zeigt die Einsiedler Zeile.
+  </aside>
+</section>
+
+<section>
+  <div class="frame">
+    <p class="kicker">eChant</p>
+    <h2>eChant: Neumeneditor</h2>
+    <div class="body split flip">
+      <figure class="media">
+        <video data-autoplay muted loop playsinline poster="assets/editor/editor-demo-poster.png">
+          <source src="assets/editor/editor-demo.mp4" type="video/mp4">
+          <source src="assets/editor/editor-demo.webm" type="video/webm">
+        </video>
+        <figcaption>St. Gallen, Stiftsbibliothek, Cod. Sang. 338, S. 75 (e-codices, CC BY-NC 4.0). Littera significativa und Liqueszenz werden nur zur Vorführung eingefügt und danach rückgängig gemacht.</figcaption>
+      </figure>
+      <div>
+        <p class="lede">
+          Neumen-Editor erlaubt das grafische Bearbeiten adiastematischer Neumen im Browser.
+        </p>
+
+        <ul class="facts">
+          <li>Cursor</li>
+          <li>Undo/Redo</li>
+          <li>Litterae significativae</li>
+          <li>Faksimile-Verknüpfung</li>
+        </ul>
+      </div>
+    </div>
+    <footer class="foot"><img src="assets/logo/tree.svg" alt=""><span>Morent · Böttiger · Pfeffer</span><span class="page"></span></footer>
+  </div>
+  <aside class="notes">
+    Faksimile und Notation teilen ein Dokument und eine Undo-Historie.
+    Im Video: Hover-Verknüpfung, der Name wechselt zu „pes quadratus liquescens“, dann Undo.
+    Der Kern des Editors stammt von Böttiger und entstand ohne Claude Code.
+  </aside>
+</section>
+
+<section>
+  <div class="frame">
+    <p class="kicker">eChant</p>
+    <h2>eChant: Handschrift → MEI-Kodierung</h2>
+    <div class="body split">
+      <div>
+        <p class="lede">Die Erkennung überträgt eine Seite in MEI, verknüpft mit dem Faksimile. Korrigiert wird im Editor.</p>
+        <ul class="facts">
+          <li>Segmentierung, Texterkennung mit Kraken und dem <span class="nobr">TRIDIS-Modell</span> (Torres Aguilar 2024), Klassifikation und Gruppierung der Neumen, Zuordnung zu Silben.</li>
+          <li>Ausgehend von handannotierten Neumen werden <b>87,3&#8239;%</b> der richtigen Silbe zugeordnet (68&nbsp;Zeilen). Eine Evaluation der Pipeline als Ganzes steht noch aus.</li>
+          <li>Referenzdaten: <b>2.509</b> Annotationen auf 17&nbsp;Seiten und <b>4.923</b> von Hand geprüfte Tintenkomponenten.</li>
+        </ul>
+      </div>
+      <div class="r-stack stage">
+        <figure class="media">
+          <video data-autoplay muted loop playsinline poster="assets/pipeline/pipeline-demo-poster.png">
+            <source src="assets/pipeline/pipeline-demo.mp4" type="video/mp4">
+            <source src="assets/pipeline/pipeline-demo.webm" type="video/webm">
+          </video>
+          <figcaption>Unkorrigiertes Erkennungsergebnis für St. Gallen, Stiftsbibliothek, Cod. Sang. 390, S. 115 (e-codices, CC BY-NC 4.0).</figcaption>
+        </figure>
+      </div>
+    </div>
+    <footer class="foot"><img src="assets/logo/tree.svg" alt=""><span>Morent · Böttiger · Pfeffer</span><span class="page"></span></footer>
+  </div>
+  <aside class="notes">
+    Gemessen sind nur einzelne Stufen, z.&#8239;B. Gruppierung F1 = 0,842.
+    Auf dem Produktionsserver ist bewusst keine Erkennung installiert.
+    Keine Edition: Fehler sind im MEI nicht markiert.
+  </aside>
+</section>
+
+<section>
+  <div class="frame">
+    <p class="kicker">Claude Code</p>
+    <h2>Ein Zyklus: Prompt, Lauf, Korrektur</h2>
+    <div class="body split">
+      <div>
+        <p class="lede"><b>1.545</b> getippte Prompts in <b>264</b> Sitzungen, von März bis August 2026.</p>
+        <ul class="facts">
+          <li>Etwa jeder vierte Prompt korrigiert das zuletzt Gezeigte, ausgezählt an einer Stichprobe von 150 Prompts.</li>
+          <li>Quilisma: sechs Fassungen in sechs Wochen, entschieden am Faksimile. Silbenzuordnung: sieben Ansätze, gemessen, Ziel verfehlt.</li>
+          <li>Vierzehn Ansätze wurden gebaut und wieder verworfen. Eine Migration löschte Produktionsdaten, repariert nach 16&nbsp;Minuten.</li>
+        </ul>
+      </div>
+      <figure class="media">
+        <svg class="cycle" viewBox="0 0 940 400" role="img"
+          aria-label="Zyklus aus Prompt, Lauf und Ergebnis, mit Rücklauf für Korrekturen">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#9ca3af"/>
+            </marker>
+          </defs>
+          <rect class="box" x="6" y="30" width="268" height="140"/>
+          <text class="box-title" x="30" y="76">Prompt</text>
+          <text class="box-sub" x="30" y="110">Median 16 Wörter</text>
+          <rect class="box" x="336" y="30" width="268" height="140"/>
+          <text class="box-title" x="360" y="76">Lauf</text>
+          <text class="box-sub" x="360" y="110">Median 8 Werkzeugaufrufe</text>
+          <text class="box-sub" x="360" y="138">3,3 Minuten</text>
+          <rect class="box" x="666" y="30" width="268" height="140"/>
+          <text class="box-title" x="690" y="76">Ergebnis</text>
+          <text class="box-sub" x="690" y="110">50 % ändern Dateien</text>
+          <text class="box-sub" x="690" y="138">20 % enden in einem Commit</text>
+          <path class="flow" d="M 286 100 L 326 100" marker-end="url(#arrow)"/>
+          <path class="flow" d="M 616 100 L 656 100" marker-end="url(#arrow)"/>
+          <path class="flow" d="M 800 182 C 800 300, 140 300, 140 184" marker-end="url(#arrow)"/>
+          <text class="loop-label" x="470" y="292" text-anchor="middle">26 % korrigieren das Ergebnis</text>
+        </svg>
+        <figcaption>Ein Zyklus reicht von einem getippten Prompt bis zum nächsten. Werte aus den Sitzungsprotokollen der drei Projekte.</figcaption>
+      </figure>
+    </div>
+    <footer class="foot"><img src="assets/logo/tree.svg" alt=""><span>Morent · Böttiger · Pfeffer</span><span class="page"></span></footer>
+  </div>
+  <aside class="notes">
+    Median 8 Werkzeugaufrufe je Prompt, p90 58, längster Lauf ohne Eingabe 227 Minuten.
+    Quilisma: sechs Fassungen, entschieden am Faksimile. Silbenzuordnung: sieben Ansätze, 0,889 statt der angestrebten 0,94.
+    389 von 434 Code-Commits tragen einen Co-Authored-By-Trailer. 31 % der Zyklen enthalten einen fehlgeschlagenen Werkzeugaufruf.
+    Menschlicher Anteil: Prompts, musikalisches Urteil, Referenzdaten, Korpusarbeit.
+  </aside>
+</section>
+
+</div>
+</div>
+<script src="lib/reveal/reveal.js"></script>
+<script src="lib/reveal/notes.js"></script>
+<script defer src="lib/verovio/verovio-toolkit-wasm.js"></script>
+<script defer src="live-neume.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1600,
+    height: 900,
+    margin: 0.04,
+    center: false,
+    controls: false,
+    progress: true,
+    slideNumber: false,
+    hash: true,
+    transition: "fade",
+    transitionSpeed: "fast",
+    backgroundTransition: "none",
+    plugins: [RevealNotes]
+  }).then(() => {
+    const total = Reveal.getTotalSlides();
+    Reveal.getSlides().forEach((slide, index) => {
+      slide.querySelector(".page")?.replaceChildren(`${index + 1} / ${total}`);
+    });
+  });
+</script>
+</body>
+</html>
