@@ -105,7 +105,7 @@ html, body, .reveal-viewport { background: var(--paper); }
   color: var(--muted);
 }
 
-.facts li.caveat { color: var(--accent); }
+.facts li.caveat { color: var(--accent); font-weight: 600; }
 
 .facts {
   list-style: none;
