@@ -9,6 +9,9 @@ const LOOP_PAUSE_MS = 2400;
 const CAP_MS = 900;
 const READY_TIMEOUT_MS = 20000;
 const AUTHORED_FIELDS = new Set(["Marks"]);
+/* `angled` is the square quadratus foot. The corpus does not encode it — it comes
+   from the class seed — so the demo never sets it. */
+const SKIPPED_FIELDS = new Set(["Flags"]);
 const SEEDED_MS = 130;
 
 const KEY_LABELS = {
@@ -92,9 +95,9 @@ class EditorDemo {
       await wait(STEP_MS);
       return;
     }
-    /* Tilt, angled and the like are not typed by anyone: the neume class carries
-       them. They are still set, so the neume looks like the manuscript, but they
-       pass without a key cap and at a pace that reads as the system's doing. */
+    if (SKIPPED_FIELDS.has(step.field)) return;
+    /* Tilt and length are not typed by anyone either: the neume class carries them.
+       They are set so the stroke reads like the manuscript, but without a key cap. */
     const authored = AUTHORED_FIELDS.has(step.field);
     if (authored) keyCap.show(`${step.field}: ${step.value}`, { action: true });
     else this.say("Form und Neigung kommen aus der Neumenklasse");
@@ -180,6 +183,8 @@ if (!window.EChantDemo) {
       else demo?.play();
     },
   });
+
+  window.__editorHandle = handle;  // for checking the encoding from a test
 
   /* Whoever has the keyboard, the key is shown. */
   stage.addEventListener("keydown", (event) => keyCap.show(KEY_LABELS[event.key] ?? event.key), true);
