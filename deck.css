@@ -96,7 +96,7 @@ html, body, .reveal-viewport { background: var(--paper); }
 .body.prose .stat-line b { font-weight: 600; color: var(--ink); }
 
 .body.prose .facts { margin-top: 14px; }
-.body.prose .facts li { padding: 18px 0; font-size: 21px; }
+.body.prose .facts li { padding: 24px 0; font-size: 26px; color: var(--body); }
 
 .facts-label {
   margin-top: 36px !important;
@@ -105,7 +105,8 @@ html, body, .reveal-viewport { background: var(--paper); }
   color: var(--muted);
 }
 
-.facts li.caveat { color: var(--accent); font-weight: 600; }
+.facts li.caveat,
+.body.prose .facts li.caveat { color: var(--accent); font-weight: 600; }
 
 .facts {
   list-style: none;
