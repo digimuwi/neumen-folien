@@ -39,6 +39,16 @@ const STATES = [
     </nc>
   </neume>
 </syllable>`,
+  `<syllable>
+  <syl>Quilisma scandicus</syl>
+  <neume>
+    <nc tilt="e" rellen="s"/>
+    <nc con="g" intm="u">
+      <quilisma waves="3"/>
+    </nc>
+    <nc tilt="ne" rellen="l"/>
+  </neume>
+</syllable>`,
 ];
 
 const document_for = (snippet) => `<?xml version="1.0" encoding="UTF-8"?>
