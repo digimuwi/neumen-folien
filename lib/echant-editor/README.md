@@ -10,7 +10,7 @@
 | source | `digimuwi/neumes-playground`, branch `main`, commit `b8d25c9`, and the corpus after `clear_seeded_loops` |
 | Verovio | the deck's own `lib/verovio/verovio-toolkit-wasm.js` (6.3.0-dev-5c3ee0e), reused |
 | chant | `def918df-96d6-4fef-9c12-c2eaefc7db90` — 3 lines, 26 syllables, 56 neumes, 3 significative letters |
-| size | `echant-editor.js` 1,124,626 bytes (432 kB gzipped), `facsimile.jpg` 130,278 bytes, this directory 1.4 MB |
+| size | `echant-editor.js` 1,124,699 bytes (432 kB gzipped), `facsimile.jpg` 130,278 bytes, this directory 1.4 MB |
 
 `example.html` is a working page: open it from the Finder and the demo plays, a click
 hands the editor over. It is also the shortest description of the API.
@@ -68,7 +68,7 @@ button is disabled, and the read-only `selection()` / `neumes()`.
 | `clickInspector(field, value)` | click a control in the note inspector by the field's own label and the control's value: `('Marks','episema')`, `('Tilt','se')`, `('Flags','angled')`, `('Connection','g')`, `('Curve','c')`, `('Length','l')`. Everything the keyboard cannot set is set here |
 | `toggleMark(mark)` | `clickInspector('Marks', mark)` |
 | `setLittera(place, letter)` | put a littera significativa on the selected **neume** through the inspector's placement grid. The caret must be on the neume, not inside it — one Space after the last note gets there. **async** — the picker is a popover that has to render first |
-| `key(key, modifiers?)` | send one keystroke to the editor. `u`/`s`/`d` set the melodic motion, `*` begins a neume, `Space` splits the syllable, `r` rotates the tilt, arrows move the caret, `Backspace`/`Delete` remove |
+| `key(key, modifiers?)` | send one keystroke to the editor. `*` begins a neume, `u`/`s`/`d` append a note, `Space` leaves the neume (a second one moves to the next syllable), `r` rotates the tilt, arrows move the caret, `Backspace`/`Delete` remove |
 | `type(keys, delayMs?)` | the same, as a sequence, awaitable |
 | `undo()` / `redo()` | the document's single undo timeline, shared by both panes |
 | `selection()` | `{ kind: 'neume' \| 'nc' \| 'syllable' \| 'none', neumeId, neumeName, typeKey, syllable, ncIndex, specials }` |
@@ -76,7 +76,7 @@ button is disabled, and the read-only `selection()` / `neumes()`.
 | `encoding()` | the live encoding: `[{ id, typeKey, syllable, notes, litterae, name }]`, each note's attributes as stored. The read-back that makes an entry sequence checkable against the corpus |
 | `activate()` / `deactivate()` / `isActive()` | who has the keyboard |
 | `isReady()` | whether the chant is loaded |
-| `reset()` | throw the edits away and reload the pristine chant; resolves once it is back |
+| `reset({ blank? })` | throw the edits away and reload the chant; resolves once it is back. `{ blank: true }` reloads it without its neumes, `{ blank: false }` with them, omitted keeps the current mode. It reloads the document in place, so a looping demo does not blink the panes out, and overlapping resets all resolve — a loop awaiting one while a slide change fires another keeps running |
 | `relayout()` | re-measure after the host box changed; done automatically on resize |
 | `onChange(listener)` | fires on every document edit and every caret move; returns an unsubscribe |
 | `unmount()` | remove everything, including the listeners on `document` |
@@ -252,6 +252,9 @@ presenter to confirm leaving the page after any demo edit.
 - Nothing is typed until the caret is somewhere. On a blank chant there is no neume to
   click, so a driver has to `await selectSyllable(0)` before its first key — without it
   the keystrokes land in `DefaultEditState` and are silently dropped.
+- `reset()` resolves after five seconds even if the editor never got a box to render in,
+  so an awaiting loop cannot stall on a host that stays hidden. The reload has then not
+  happened, and the next `selectSyllable` returns false.
 - Drawing a box on the facsimile is still wired to region recognition and will report
   „Recognition is not part of this offline demo.“ Select Zone in the inspector works.
 - Only one instance per page (see `#root` above).
