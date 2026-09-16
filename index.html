@@ -23,8 +23,13 @@
     <p class="team">Morent / Böttiger / Pfeffer</p>
   </div>
   <aside class="notes">
-    Vier Teile: Verovio-Fork, eChant-Editor, Erkennung, Claude Code<br>
-    Neumen auf dieser Folie: aus dem Fork
+    Vier Teile:
+    <ul>
+      <li>Adiastematischer Verovio-Fork</li>
+      <li>Neumeneditor</li>
+      <li>Neumenerkennung</li>
+      <li>Einsatz von Claude Code</li>
+    </ul>
   </aside>
 </section>
 
@@ -68,10 +73,11 @@
     <footer class="foot"><img src="assets/logo/tree.svg" alt=""><span>Morent / Böttiger / Pfeffer</span><span class="page"></span></footer>
   </div>
   <aside class="notes">
-    Option --neume-calligraphic, keine Font-Glyphen<br>
-    21 Commits, eigener Fork, nicht eingereicht<br>
-    Nach Augenmaß abgestimmt, keine Evaluation<br>
-    Klick: Einsiedler Zeile
+    <ul>
+      <li>Das Rendering folgt den visuellen Attributen in MEI, insbesondere <code>tilt</code> und <code>curve</code></li>
+      <li>Im Prinzip universell, aber hauptsächlich getestet an St. Galler Neumen</li>
+      <li>Selbst ausprobieren: Folien öffnen und MEI bearbeiten => wird live gerendert</li>
+    </ul>
   </aside>
 </section>
 
@@ -95,10 +101,11 @@
     <footer class="foot"><img src="assets/logo/tree.svg" alt=""><span>Morent / Böttiger / Pfeffer</span><span class="page"></span></footer>
   </div>
   <aside class="notes">
-    Getippt: Kontur, Episem, Strophicus, Littera<br>
-    Form und Neigung aus der Neumenklasse<br>
-    Neue Neumen ohne Faksimile-Zone<br>
-    Editor-Kern: Böttiger, ohne Claude Code
+    <ul>
+      <li>Eingabemethode orientiert sich an bekannten Notationsprogrammen</li>
+      <li>Hauptsächlich entwickelt von Jonas Böttiger</li>
+      <li>Features: Undo/Redo, Verknüpfung mit Faksimile, Litterae significativae</li>
+    </ul>
   </aside>
 </section>
 
@@ -119,10 +126,11 @@
     <footer class="foot"><img src="assets/logo/tree.svg" alt=""><span>Morent / Böttiger / Pfeffer</span><span class="page"></span></footer>
   </div>
   <aside class="notes">
-    Segmentierung, Kraken mit TRIDIS, Gruppierung, Silbenzuordnung<br>
-    87,3 % Silbenzuordnung, 68 Zeilen<br>
-    Gesamtpipeline nicht evaluiert<br>
-    Produktion: bewusst ohne Erkennung
+    <ul>
+      <li>ML-Modell zur Segmentierung und Neumenerkennung wurde mit eigenen Annotationen trainiert</li>
+      <li>Texterkennung basiert auf dem Modell TRIDIS</li>
+      <li>Gesamtpipeline ist noch in Entwicklung – in Zukunft hoffentlich gemeinsam mit ELLIS</li>
+    </ul>
   </aside>
 </section>
 
@@ -142,12 +150,6 @@
     </div>
     <footer class="foot"><img src="assets/logo/tree.svg" alt=""><span>Morent / Böttiger / Pfeffer</span><span class="page"></span></footer>
   </div>
-  <aside class="notes">
-    389 von 434 Code-Commits mit Trailer<br>
-    Median 8 Werkzeugaufrufe je Prompt<br>
-    Quilisma: sechs Fassungen, entschieden am Faksimile<br>
-    Panne: Migration löschte Produktionsdaten
-  </aside>
 </section>
 
 </div>
