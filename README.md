@@ -8,17 +8,22 @@ Fünf Browser-Folien zum Verovio-Fork für St. Galler Neumen, zum eChant-Editor,
 
 | Taste | Funktion |
 |---|---|
-| → / Leertaste | nächste Folie oder nächster Schritt (Folien 2 und 4 haben je einen zusätzlichen Schritt) |
+| → / Leertaste | nächste Folie oder nächster Schritt (Folie 2 hat einen zusätzlichen Schritt) |
 | S | Sprechernotizen |
 | F | Vollbild |
 | Esc | Übersicht |
+
+## Online
+
+Die Folien liegen öffentlich unter <https://digimuwi.github.io/neumen-folien/>. Dort lässt sich auf Folie 2 auch selbst MEI eingeben. `git push` auf `main` veröffentlicht eine neue Fassung; `research/` bleibt durch `.gitignore` außen vor.
 
 ## Aufbau
 
 - `index.html`, `deck.css`: die Folien ([reveal.js](https://revealjs.com) 6, MIT).
 - `assets/`: nur, was die Folien zeigen.
 - `lib/`: reveal.js, EB Garamond und Inter (beide SIL OFL, über Fontsource).
-- `research/`: Belege zu den Folien und nicht verwendete Abbildungen. `python3 research/claude/deck_chart.py` erzeugt das Diagramm auf Folie 5 aus `research/claude/stats.json` neu. Die Skripte in `research/claude/scripts/` legen bei erneutem Aufruf Prompt-Texte in ihrem Verzeichnis ab. `research/` sollte deshalb privat bleiben.
+- `live-neume.js`, `lib/verovio/`: der Live-Editor auf Folie 2 und der Verovio-Build des Forks (Stand 5c3ee0e), der im Browser rendert.
+- `research/`: Belege zu den Folien, Auswertung der Sitzungsprotokolle (`research/claude/process.md`) und nicht verwendete Abbildungen. Die Skripte in `research/claude/scripts/` legen bei erneutem Aufruf Prompt-Texte in ihrem Verzeichnis ab. `research/` sollte deshalb privat bleiben.
 
 ## Nachweise
 

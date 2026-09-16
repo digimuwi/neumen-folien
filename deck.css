@@ -112,6 +112,12 @@ html, body, .reveal-viewport { background: var(--paper); }
 
 .media img.plain { display: block; width: 100%; }
 
+.deck-url {
+  margin-left: 14px;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
 .media figcaption {
   margin-top: 12px;
   font-size: 16px;
