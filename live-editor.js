@@ -8,6 +8,8 @@ const READ_MS = 2600;
 const LOOP_PAUSE_MS = 2400;
 const CAP_MS = 900;
 const READY_TIMEOUT_MS = 20000;
+const AUTHORED_FIELDS = new Set(["Marks"]);
+const SEEDED_MS = 130;
 
 const KEY_LABELS = {
   " ": "Leertaste",
@@ -68,18 +70,36 @@ class EditorDemo {
     caption.textContent = text;
   }
 
+  /* The corpus encodes only the contour and the real annotations: an episema, a
+     strophicus, a littera. Tilt, angled and the like come from the neume class, so
+     the demo does not type them either. */
+  authored(steps) {
+    return steps.filter(
+      (step) => step.kind !== "inspector" || AUTHORED_FIELDS.has(step.field)
+    );
+  }
+
   async perform(step) {
     if (step.kind === "key") {
       keyCap.show(KEY_LABELS[step.key] ?? step.key);
       this.handle.key(step.key);
-    } else if (step.kind === "inspector") {
-      keyCap.show(`${step.field}: ${step.value}`, { action: true });
-      await this.handle.clickInspector(step.field, step.value);
-    } else if (step.kind === "littera") {
+      await wait(STEP_MS);
+      return;
+    }
+    if (step.kind === "littera") {
       keyCap.show(`Littera: ${step.letter}`, { action: true });
       await this.handle.setLittera(step.place ?? step.placement, step.letter);
+      await wait(STEP_MS);
+      return;
     }
-    await wait(STEP_MS);
+    /* Tilt, angled and the like are not typed by anyone: the neume class carries
+       them. They are still set, so the neume looks like the manuscript, but they
+       pass without a key cap and at a pace that reads as the system's doing. */
+    const authored = AUTHORED_FIELDS.has(step.field);
+    if (authored) keyCap.show(`${step.field}: ${step.value}`, { action: true });
+    else this.say("Form und Neigung kommen aus der Neumenklasse");
+    await this.handle.clickInspector(step.field, step.value);
+    await wait(authored ? STEP_MS : SEEDED_MS);
   }
 
   async enterSyllable(generation, entry) {

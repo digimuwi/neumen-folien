@@ -138,6 +138,39 @@ html, body, .reveal-viewport { background: var(--paper); }
   margin: 0 auto;
 }
 
+/* Slide 4: the recognition stages as tabs */
+
+.media.panels {
+  display: flex;
+  flex-direction: column;
+  height: 600px;
+  padding: 24px 28px 20px;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
+
+.panel-tabs { display: flex; gap: 34px; margin-bottom: 22px; }
+
+.panel-tab {
+  padding: 0 0 6px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  font: 400 21px var(--sans);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.panel-tab.current { color: var(--accent); border-bottom-color: var(--accent); }
+
+.panel-stage { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; }
+
+.panel-stage img { max-width: 100%; max-height: 100%; }
+
+.media.panels figcaption { margin-top: 16px; }
+.media.panels figcaption .source { display: block; margin-top: 4px; color: #9ca3af; }
+.media.panels.held #pipeline-caption { color: var(--accent); }
+
 /* Slide 3: the embedded eChant editor */
 
 .media.editor { height: 620px; display: flex; flex-direction: column; }
