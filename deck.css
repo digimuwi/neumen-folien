@@ -112,6 +112,14 @@ html, body, .reveal-viewport { background: var(--paper); }
 
 .media img.plain { display: block; width: 100%; }
 
+/* Slide 3: the demo stands alone, so it is capped by height rather than width. */
+.media.demo video {
+  width: auto;
+  max-width: 100%;
+  max-height: 560px;
+  margin: 0 auto;
+}
+
 .deck-url {
   margin-left: 14px;
   font-variant-numeric: tabular-nums;

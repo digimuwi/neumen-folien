@@ -69,6 +69,8 @@
   </div>
   <aside class="notes">
     Option --neume-calligraphic: Jede Neume wird als Federbewegung berechnet, Federwinkel und Neigung sind einstellbar.
+    Grundlage: Verovio (RISM Digital) mit dem Neumenmodul von DDMAL und das MEI-Modul für Neumen, Neumennamen nach Cardine, Semiologia gregoriana (1968).
+    21 Commits von Juni bis August 2026 im öffentlichen Fork digimuwi/verovio-adiastematic, bisher nicht bei Verovio eingereicht.
     Grenzen: nach Augenmaß an 136 Beispielen abgestimmt, Abstände in der Zeile noch ungleichmäßig.
     Ein Klick zeigt die Einsiedler Zeile.
   </aside>
@@ -78,33 +80,22 @@
   <div class="frame">
     <p class="kicker">eChant</p>
     <h2>eChant: Neumeneditor</h2>
-    <div class="body split flip">
-      <figure class="media">
+    <div class="body">
+      <figure class="media demo">
         <video data-autoplay muted loop playsinline poster="assets/editor/editor-demo-poster.png">
           <source src="assets/editor/editor-demo.mp4" type="video/mp4">
           <source src="assets/editor/editor-demo.webm" type="video/webm">
         </video>
         <figcaption>St. Gallen, Stiftsbibliothek, Cod. Sang. 338, S. 75 (e-codices, CC BY-NC 4.0). Littera significativa und Liqueszenz werden nur zur Vorführung eingefügt und danach rückgängig gemacht.</figcaption>
       </figure>
-      <div>
-        <p class="lede">
-          Neumen-Editor erlaubt das grafische Bearbeiten adiastematischer Neumen im Browser.
-        </p>
-
-        <ul class="facts">
-          <li>Cursor</li>
-          <li>Undo/Redo</li>
-          <li>Litterae significativae</li>
-          <li>Faksimile-Verknüpfung</li>
-        </ul>
-      </div>
     </div>
     <footer class="foot"><img src="assets/logo/tree.svg" alt=""><span>Morent · Böttiger · Pfeffer</span><span class="page"></span></footer>
   </div>
   <aside class="notes">
-    Faksimile und Notation teilen ein Dokument und eine Undo-Historie.
-    Im Video: Hover-Verknüpfung, der Name wechselt zu „pes quadratus liquescens“, dann Undo.
-    Der Kern des Editors stammt von Böttiger und entstand ohne Claude Code.
+    Der Editor erlaubt das grafische Bearbeiten adiastematischer Neumen im Browser: Cursor, Undo und Redo, Litterae significativae, Verknüpfung mit dem Faksimile.
+    Faksimile und Notation teilen ein Dokument und eine Undo-Historie. Neumennamen ergeben sich aus der kodierten Struktur.
+    eChant soll die Gesänge des Messpropriums aus rund 150 Quellen des Bodenseeraums kodieren, von etwa 900 bis ins 19. Jahrhundert.
+    Der Kern des Editors stammt von Böttiger (neumes-editor, 2024 bis 2026) und entstand ohne Claude Code. Im Mai 2026 hat eChant ihn übernommen.
   </aside>
 </section>
 
