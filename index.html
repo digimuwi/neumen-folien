@@ -23,7 +23,8 @@
     <p class="team">Morent / Böttiger / Pfeffer</p>
   </div>
   <aside class="notes">
-    Vier Teile: Verovio-Fork, eChant-Editor, ML-Erkennung in eChant, Claude Code.
+    Vier Teile: Verovio-Fork, eChant-Editor, Erkennung, Claude Code<br>
+    Neumen auf dieser Folie: aus dem Fork
   </aside>
 </section>
 
@@ -67,11 +68,10 @@
     <footer class="foot"><img src="assets/logo/tree.svg" alt=""><span>Morent / Böttiger / Pfeffer</span><span class="page"></span></footer>
   </div>
   <aside class="notes">
-    Option --neume-calligraphic: Jede Neume wird als Federbewegung berechnet, Federwinkel und Neigung sind einstellbar.
-    Grundlage: Verovio (RISM Digital) mit dem Neumenmodul von DDMAL und das MEI-Modul für Neumen, Neumennamen nach Cardine, Semiologia gregoriana (1968).
-    21 Commits von Juni bis August 2026 im öffentlichen Fork digimuwi/verovio-adiastematic, bisher nicht bei Verovio eingereicht.
-    Grenzen: nach Augenmaß an 136 Beispielen abgestimmt, Abstände in der Zeile noch ungleichmäßig.
-    Ein Klick zeigt die Einsiedler Zeile.
+    Option --neume-calligraphic, keine Font-Glyphen<br>
+    21 Commits, eigener Fork, nicht eingereicht<br>
+    Nach Augenmaß abgestimmt, keine Evaluation<br>
+    Klick: Einsiedler Zeile
   </aside>
 </section>
 
@@ -95,12 +95,10 @@
     <footer class="foot"><img src="assets/logo/tree.svg" alt=""><span>Morent / Böttiger / Pfeffer</span><span class="page"></span></footer>
   </div>
   <aside class="notes">
-    Der Editor erlaubt das grafische Bearbeiten adiastematischer Neumen im Browser: Cursor, Undo und Redo, Litterae significativae, Verknüpfung mit dem Faksimile.
-    Getippt wird nur, was annotiert wird: Kontur, Episem, Strophicus, Littera. Form und Neigung kommen aus der Neumenklasse, @angled setzt die Vorführung nicht.
-    Neu getippte Neumen haben noch keine Zone im Faksimile; die Kästen dort gehören zu Text und Silben. Zonen kommen aus der Erkennung oder werden von Hand gezogen.
-    Faksimile und Notation teilen ein Dokument und eine Undo-Historie. Neumennamen ergeben sich aus der kodierten Struktur.
-    eChant soll die Gesänge des Messpropriums aus rund 150 Quellen des Bodenseeraums kodieren, von etwa 900 bis ins 19. Jahrhundert.
-    Der Kern des Editors stammt von Böttiger (neumes-editor, 2024 bis 2026) und entstand ohne Claude Code. Im Mai 2026 hat eChant ihn übernommen.
+    Getippt: Kontur, Episem, Strophicus, Littera<br>
+    Form und Neigung aus der Neumenklasse<br>
+    Neue Neumen ohne Faksimile-Zone<br>
+    Editor-Kern: Böttiger, ohne Claude Code
   </aside>
 </section>
 
@@ -121,13 +119,10 @@
     <footer class="foot"><img src="assets/logo/tree.svg" alt=""><span>Morent / Böttiger / Pfeffer</span><span class="page"></span></footer>
   </div>
   <aside class="notes">
-    Die Erkennung überträgt eine Seite in MEI, verknüpft mit dem Faksimile. Korrigiert wird im Editor.
-    Stufen: Segmentierung, Texterkennung mit Kraken und dem TRIDIS-Modell (Torres Aguilar 2024), Klassifikation und Gruppierung der Neumen, Zuordnung zu Silben.
-    Ausgehend von handannotierten Neumen werden 87,3 % der richtigen Silbe zugeordnet, gemessen an 68 Zeilen. Eine Evaluation der Pipeline als Ganzes steht noch aus.
-    Referenzdaten: 2.509 Annotationen auf 17 Seiten und 4.923 von Hand geprüfte Tintenkomponenten.
-    Gemessen sind nur einzelne Stufen, z.&#8239;B. Gruppierung F1 = 0,842.
-    Auf dem Produktionsserver ist bewusst keine Erkennung installiert.
-    Keine Edition: Fehler sind im MEI nicht markiert.
+    Segmentierung, Kraken mit TRIDIS, Gruppierung, Silbenzuordnung<br>
+    87,3 % Silbenzuordnung, 68 Zeilen<br>
+    Gesamtpipeline nicht evaluiert<br>
+    Produktion: bewusst ohne Erkennung
   </aside>
 </section>
 
@@ -141,17 +136,17 @@
         <li>Mehrmonatige Entwicklungszeiten können auf wenige Tage reduziert werden</li>
         
         <li>Sauberer Quelltext, mit richtigen Prompts kaum „AI Slop“</li>
+        <li class="caveat">(Unter aktuellen Bedingungen) Abhängigkeit von kommerziellen Anbietern</li>
         <li class="caveat">Geschlossenes System: keine vollständige Kenntnis des Quelltextes mehr. Weiterbearbeitung erzwingt Weiterverwendung von KI-Coding-Assistenten.</li>
       </ul>
     </div>
     <footer class="foot"><img src="assets/logo/tree.svg" alt=""><span>Morent / Böttiger / Pfeffer</span><span class="page"></span></footer>
   </div>
   <aside class="notes">
-    Median 8 Werkzeugaufrufe je Prompt, p90 58, längster Lauf ohne Eingabe 227 Minuten.
-    Token: Verovio-Fork 4,9 Mio., eChant 18,2 Mio., St. Gallen 7,5 Mio. Dazu kommen 7,7 Mrd. aus dem Cache gelesene Token, also derselbe Kontext, der bei jedem Schritt erneut gelesen wird. Ein Token entspricht grob 0,75 Wörtern.
-    Quilisma: sechs Fassungen, entschieden am Faksimile. Silbenzuordnung: sieben Ansätze, 0,889 statt der angestrebten 0,94.
-    389 von 434 Code-Commits tragen einen Co-Authored-By-Trailer. 31 % der Zyklen enthalten einen fehlgeschlagenen Werkzeugaufruf.
-    Menschlicher Anteil: Prompts, musikalisches Urteil, Referenzdaten, Korpusarbeit.
+    389 von 434 Code-Commits mit Trailer<br>
+    Median 8 Werkzeugaufrufe je Prompt<br>
+    Quilisma: sechs Fassungen, entschieden am Faksimile<br>
+    Panne: Migration löschte Produktionsdaten
   </aside>
 </section>
 
