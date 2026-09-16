@@ -1,10 +1,6 @@
-# Adiastematische Neumen in MEI
+Folien für Vortrag bei GfM-Fachgruppensymposium Digitale Musikwissenschaft/KI 29.9.26.
 
-Fünf Browser-Folien zum Verovio-Fork für St. Galler Neumen, zum eChant-Editor, zur Erkennung St. Galler Neumen in eChant und zur Rolle von Claude Code bei der Entwicklung. Team: Morent, Böttiger, Pfeffer (Universität Tübingen).
-
-## Präsentieren
-
-`index.html` in Chrome, Safari oder Firefox öffnen. Alles liegt lokal, die Folien funktionieren also auch offline.
+Zum Präsentiereen `index.html` öffnen.
 
 | Taste | Funktion |
 |---|---|
@@ -12,24 +8,3 @@ Fünf Browser-Folien zum Verovio-Fork für St. Galler Neumen, zum eChant-Editor,
 | S | Sprechernotizen |
 | F | Vollbild |
 | Esc | Übersicht |
-
-## Online
-
-Die Folien liegen öffentlich unter <https://digimuwi.github.io/neumen-folien/>. Dort lässt sich auf Folie 2 auch selbst MEI eingeben. `git push` auf `main` veröffentlicht eine neue Fassung; `research/` bleibt durch `.gitignore` außen vor.
-
-## Aufbau
-
-- `index.html`, `deck.css`: die Folien ([reveal.js](https://revealjs.com) 6, MIT).
-- `assets/`: nur, was die Folien zeigen.
-- `lib/`: reveal.js, EB Garamond und Inter (beide SIL OFL, über Fontsource).
-- `live-neume.js`, `lib/verovio/`: der Live-Editor auf Folie 2 und der Verovio-Build des Forks (Stand 5c3ee0e), der im Browser rendert.
-- `research/`: Belege zu den Folien, Auswertung der Sitzungsprotokolle (`research/claude/process.md`) und nicht verwendete Abbildungen. Die Skripte in `research/claude/scripts/` legen bei erneutem Aufruf Prompt-Texte in ihrem Verzeichnis ab. `research/` sollte deshalb privat bleiben.
-
-## Nachweise
-
-- Einsiedeln, Stiftsbibliothek, Codex 121(1151), S. 35, sowie St. Gallen, Stiftsbibliothek, Cod. Sang. 338, S. 75, und Cod. Sang. 390, S. 115, alle über [e-codices](https://www.e-codices.ch), CC BY-NC 4.0.
-- Darstellung mit einem Fork von [Verovio](https://www.verovio.org) (RISM Digital) und dessen Neumenmodul von DDMAL, Kodierung nach dem MEI-Modul für Neumen.
-- Neumennamen nach Eugène Cardine, *Semiologia gregoriana*, Rom 1968.
-- Der eChant-Editor beruht auf dem neumes-editor, überwiegend von Jonas Böttiger entwickelt.
-- Texterkennung mit [Kraken](https://kraken.re) und dem TRIDIS-Modell (Torres Aguilar 2024).
-- Das Logo der Eberhard Karls Universität Tübingen steht für die Zugehörigkeit des Teams.
