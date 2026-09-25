@@ -50,11 +50,21 @@ const stage = document.getElementById("editor-stage");
 const caption = document.getElementById("editor-caption");
 const keyCap = new KeyCap(document.getElementById("editor-keys"));
 
-const useFallbackVideo = (reason) => {
-  console.warn("embedded editor unavailable:", reason.message);
+const showRecording = () => {
   panel.classList.add("fallback-active");
   panel.querySelector("video")?.play().catch(() => {});
 };
+
+const useFallbackVideo = (reason) => {
+  console.warn("embedded editor unavailable:", reason.message);
+  showRecording();
+};
+
+/* The speaker view previews the deck in two iframes (`?receiver`) of one window. Each
+   editor takes the focus back whenever its frame loses it, so two of them pass it back
+   and forth in microtasks forever and freeze every window of the deck. The previews
+   show the recording instead. */
+const speakerPreview = /receiver/i.test(window.location.search);
 
 /* The scripted run. It stops as soon as the editor is handed over or the slide is left. */
 class EditorDemo {
@@ -142,7 +152,9 @@ class EditorDemo {
   }
 }
 
-if (!window.EChantDemo) {
+if (speakerPreview) {
+  showRecording();
+} else if (!window.EChantDemo) {
   useFallbackVideo(new Error("EChantDemo not loaded"));
 } else {
   let demo;

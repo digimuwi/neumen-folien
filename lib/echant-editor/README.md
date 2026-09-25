@@ -258,6 +258,11 @@ presenter to confirm leaving the page after any demo edit.
 - Drawing a box on the facsimile is still wired to region recognition and will report
   „Recognition is not part of this offline demo.“ Select Zone in the inspector works.
 - Only one instance per page (see `#root` above).
+- Nor one per frame of the same window: `mount` parks the focus again whenever its
+  document loses it, so two instances in same-origin frames take it from each other in
+  an endless microtask loop and freeze every window on that thread. Reveal's speaker
+  view is exactly that (two `?receiver` iframes), so the deck does not mount the editor
+  there. Parking only while `document.hasFocus()` would fix it in the bundle.
 
 ## Rebuilding
 

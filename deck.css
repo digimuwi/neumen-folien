@@ -187,6 +187,9 @@ html, body, .reveal-viewport { background: var(--paper); }
 
 #editor-stage { position: absolute; inset: 0; }
 
+/* The recording stands in for the editor in its box, e.g. in the speaker view's previews. */
+.media.editor > video { flex: 1; min-height: 0; object-fit: contain; }
+
 .key-cap {
   position: absolute;
   left: 24px;
@@ -367,7 +370,8 @@ html, body, .reveal-viewport { background: var(--paper); }
 
 .media .live-fallback { display: none; }
 
-.media.fallback-active .live-panes { display: none; }
+.media.fallback-active .live-panes,
+.media.fallback-active .editor-stage-wrap { display: none; }
 .media.fallback-active .live-fallback { display: block; }
 
 .foot {
