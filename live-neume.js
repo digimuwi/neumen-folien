@@ -2,8 +2,8 @@
    step by step, each step a single insertion or deletion, and hands the pane over on a click. */
 
 (() => {
-const CHAR_MS = 30;
-const DELETE_MS = 18;
+const CHAR_MS = 60;
+const DELETE_MS = 36;
 const HOLD_MS = 2200;
 const TURN_MS = 2800;
 const TOOLKIT_TIMEOUT_MS = 8000;
