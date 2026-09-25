@@ -333,7 +333,14 @@ export function mount(element: HTMLElement, options: MountOptions = {}): DemoHan
     if (event.key === 'Escape' && active) setActive(false);
   };
 
-  const onFocusOut = (): void => queueMicrotask(onFocusChange);
+  // The microtask runs before a click's focus reaches its target, while the focus
+  // is still on <body>. Focus that is on its way to an element outside the editor
+  // (the MEI pane on another slide) is the user's, so it is left alone.
+  const onFocusOut = (event: FocusEvent): void => {
+    const next = event.relatedTarget;
+    if (next instanceof Node && !stage.contains(next)) return;
+    queueMicrotask(onFocusChange);
+  };
 
   document.addEventListener('pointerdown', onPointerDown, true);
   document.addEventListener('focusin', onFocusChange);
