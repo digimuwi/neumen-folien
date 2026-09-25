@@ -76,9 +76,10 @@ html, body, .reveal-viewport { background: var(--paper); }
   color: var(--body);
 }
 
-/* A slide carried by text alone: one column, a little larger. */
-.body.prose { display: block; }
-.body.prose .lede { font-size: 30px; }
+/* A slide carried by text: a little larger, the QR code to the deck beside the list. */
+.body.prose { grid-template-columns: 1fr 240px; gap: 0 64px; align-content: start; }
+.body.prose .lede { grid-column: 1 / -1; font-size: 30px; }
+.body.prose .qr { display: block; width: 100%; margin-top: 26px; }
 .body.prose .stat-line {
   margin-top: 12px !important;
   font-size: 24px;
@@ -89,7 +90,7 @@ html, body, .reveal-viewport { background: var(--paper); }
 .body.prose .stat-line b { font-weight: 600; color: var(--ink); }
 
 .body.prose .facts { margin-top: 14px; }
-.body.prose .facts li { padding: 16px 0; font-size: 26px; color: var(--body); }
+.body.prose .facts li { padding: 12px 0; font-size: 26px; color: var(--body); }
 
 .facts-label {
   margin-top: 36px !important;
